@@ -4,7 +4,7 @@ Rocks.Caching
 Rocks.Caching is a library that aimed to provide clean minimal abstraction over caching mechanics for it to be unit test and refactor friendly.
 
 ## ICacheProvider root interface
-The root interface is [ICacheProvider](https://github.com/MichaelLogutov/Rocks.Caching/blob/master/src/Rocks.Caching/ICacheProvider.cs) which provides minimal method set for caching capabilities:
+The root interface is [ICacheProvider](https://github.com/mihail-yartsev/Rocks.Caching/blob/master/src/Rocks.Caching/ICacheProvider.cs) which provides minimal method set for caching capabilities:
 
 * Get item
 * Add item
@@ -13,8 +13,7 @@ The root interface is [ICacheProvider](https://github.com/MichaelLogutov/Rocks.C
 
 ## Built in cache provider implementation
 There are couple implementation of the ICacheProvider interface built in package:
-* WebCacheProvider - uses System.Web.Caching.Cache (HttpRuntime.Cache).
-* MemoryCacheProvider - uses System.Runtime.Caching.MemoryCache (MemoryCache.Default).
+* MemoryCacheProvider - uses System.Runtime.Caching.MemoryCache.
 * DummyCacheProvider - uses dictionary to simply store all items and without any expiration or dependency caching support. Mostly used in unit testing.
 * NullCacheProvider – a Null-object pattern implementation which simply does not store any cache items and always empty. Mostly used in unit testing.
 
@@ -97,8 +96,5 @@ public async Task<int> GetUsersCountAsync ()
 }
 ```
 
-## More information
-You can read more about Rocks.Caching [here](https://web.archive.org/web/20160403191240/http://michaellogutov.com/tag/rocks-caching/).
-
 ## NuGet package
-You can install nuget package for Rocks.Caching here: https://www.nuget.org/packages/Rocks.Caching/
+You can install nuget package for Rocks.Caching here: https://www.nuget.org/packages/Rocks.Caching.NetStandard16
