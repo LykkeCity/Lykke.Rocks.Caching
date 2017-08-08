@@ -22,21 +22,6 @@ namespace Rocks.Caching.Tests
 
 
 		[TestMethod]
-		public void ShouldCreateFromObjectProperties ()
-		{
-			var sut = new
-			{
-				A = 1,
-				B = "abc",
-				C = (object) null,
-				D = new[] { 1, 2, 3 }
-			};
-
-			Assert.AreEqual ("{1}{abc}{}{:1:2:3:}", CacheKeyBuilder.CreateFromObjectProperties (sut));
-		}
-
-
-		[TestMethod]
 		public void ShouldCreateFromObjectsList ()
 		{
 			Assert.AreEqual ("{:1:abc::}", CacheKeyBuilder.Create (new object[] { 1, "abc", null }));

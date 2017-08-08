@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace Rocks.Caching
 {
@@ -10,62 +11,28 @@ namespace Rocks.Caching
 	[DebuggerDisplay ("{Result}, Expiration = {Parameters.Expiration}, Sliding = {Parameters.Sliding}, Priority = {Parameters.Priority}")]
 	public class CachableResult<T>
 	{
-		#region Private fields
-
-		private readonly T result;
-		private readonly CachingParameters parameters;
-		private readonly bool dependencyKeysIncludeResult;
-
-		#endregion
-
-		#region Construct
-
-		/// <summary>
+	    /// <summary>
 		///     Constructor.
 		/// </summary>
 		/// <param name="result">Resulting data. Can be null.</param>
 		/// <param name="parameters">Caching parameters. Can not be null.</param>
-		/// <param name="dependencyKeysIncludeResult">
-		///     True if caching <paramref name="parameters" />.DependencyKeys contains keys
-		///     that depends on <paramref name="result" /> itself.
-		/// </param>
-		public CachableResult (T result, CachingParameters parameters, bool dependencyKeysIncludeResult = false)
+		public CachableResult (T result, [CanBeNull] CachingParameters parameters)
 		{
-			if (parameters == null)
-				throw new ArgumentNullException ("parameters");
-
-			this.result = result;
-			this.parameters = parameters;
-			this.dependencyKeysIncludeResult = dependencyKeysIncludeResult;
+			this.Parameters = parameters ?? throw new ArgumentNullException (nameof(parameters));
+		    this.Result = result;
 		}
 
-		#endregion
+        /// <summary>
+        ///     (GET) Resulting data.
+        /// </summary>
+        public T Result { get; }
 
-		#region Public properties
-
-		/// <summary>
-		///     (GET) Resulting data.
-		/// </summary>
-		public T Result { get { return this.result; } }
-
-
-		/// <summary>
+	    /// <summary>
 		///     (GET) Caching parameters.
 		/// </summary>
-		public CachingParameters Parameters { get { return this.parameters; } }
+		public CachingParameters Parameters { get; }
 
-
-		/// <summary>
-		///     (GET) True if caching <see cref="Parameters" />.DependencyKeys contains parts that depends on <see cref="Result" />
-		///     itself.
-		/// </summary>
-		public bool DependencyKeysIncludeResult { get { return this.dependencyKeysIncludeResult; } }
-
-		#endregion
-
-		#region Public methods
-
-		/// <summary>
+	    /// <summary>
 		///     Returns a string that represents the current object.
 		/// </summary>
 		/// <returns>
@@ -77,13 +44,15 @@ namespace Rocks.Caching
 			var str = this.Result == null ? "null" : this.Result.ToString ();
 
 			if (this.Parameters.NoCaching)
-				str += ", no caching";
+			{
+			    str += ", no caching";
+			}
 			else
-				str += ", " + this.Parameters;
+			{
+			    str += ", " + this.Parameters;
+			}
 
-			return str;
+		    return str;
 		}
-
-		#endregion
 	}
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using JetBrains.Annotations;
 
 namespace Rocks.Caching
@@ -12,94 +10,59 @@ namespace Rocks.Caching
 	[DebuggerDisplay ("{Expiration}, Sliding = {Sliding}, Priority = {Priority}")]
 	public sealed class CachingParameters
 	{
-		#region Constants
+	    public static readonly CachingParameters NoCache = new CachingParameters (TimeSpan.Zero);
 
-		public static readonly CachingParameters NoCache = new CachingParameters (TimeSpan.Zero);
-
-		#endregion
-
-		#region Private fields
-
-		private readonly TimeSpan expiration;
-		private readonly bool sliding;
-		private readonly IEnumerable<string> dependencyKeys;
-		private readonly CachePriority? priority;
-
-		#endregion
-
-		#region Construct
-
-		/// <summary>
+	    /// <summary>
 		///     Initializes a new instance of the <see cref="T:System.Object" /> class.
 		/// </summary>
-		public CachingParameters (TimeSpan expiration, bool sliding = false, IEnumerable<string> dependencyKeys = null, CachePriority? priority = null)
+		public CachingParameters (TimeSpan expiration, bool sliding = false, CachePriority? priority = null)
 		{
-			this.expiration = expiration;
-			this.sliding = sliding;
-			this.dependencyKeys = dependencyKeys;
-			this.priority = priority;
+			this.Expiration = expiration;
+			this.Sliding = sliding;
+		    this.Priority = priority;
 		}
 
 
 		private CachingParameters ([NotNull] CachingParameters other)
 		{
 			if (other == null)
-				throw new ArgumentNullException ("other");
+			{
+			    throw new ArgumentNullException (nameof(other));
+			}
 
-			this.expiration = other.expiration;
-			this.sliding = other.sliding;
-
-			if (other.dependencyKeys != null)
-				this.dependencyKeys = other.dependencyKeys.ToList ();
-
-			this.priority = other.priority;
+		    this.Expiration = other.Expiration;
+			this.Sliding = other.Sliding;
+		    this.Priority = other.Priority;
 		}
 
-		#endregion
-
-		#region Public properties
-
-		/// <summary>
+	    /// <summary>
 		///     (GET) Expiration time.
 		/// </summary>
-		public TimeSpan Expiration { get { return this.expiration; } }
+		public TimeSpan Expiration { get; }
 
-
-		/// <summary>
+	    /// <summary>
 		///     (GET) True if current parameters represents sliding expiration.
 		/// </summary>
-		public bool Sliding { get { return this.sliding; } }
+		public bool Sliding { get; }
 
-		/// <summary>
+	    /// <summary>
 		///     (GET) Cached object priority.
 		/// </summary>
-		public CachePriority? Priority { get { return this.priority; } }
+		public CachePriority? Priority { get; }
 
-
-		/// <summary>
-		///     (GET) List of dependency keys.
-		/// </summary>
-		public IEnumerable<string> DependencyKeys { get { return this.dependencyKeys; } }
-
-
-		/// <summary>
+	    /// <summary>
 		///     (GET) Returns true if no expiration set for current parameters.
 		/// </summary>
-		public bool NoCaching { get { return this.Expiration == TimeSpan.Zero; } }
+		public bool NoCaching => this.Expiration == TimeSpan.Zero;
 
-		#endregion
-
-		#region Static methods
-
-		/// <summary>
+	    /// <summary>
 		///     Creates <see cref="CachingParameters" /> instance with expiration of <paramref name="milliseconds" />.
 		/// </summary>
 		public static CachingParameters FromMilliseconds (double milliseconds,
 		                                                  bool sliding = false,
-		                                                  IEnumerable<string> dependencyKeys = null,
 		                                                  CachePriority? priority = null)
 		{
-			return new CachingParameters (TimeSpan.FromMilliseconds (milliseconds), sliding, dependencyKeys, priority);
+			return new CachingParameters (TimeSpan.FromMilliseconds (milliseconds), sliding, priority);
 		}
 
 
@@ -108,10 +71,9 @@ namespace Rocks.Caching
 		/// </summary>
 		public static CachingParameters FromSeconds (double seconds,
 		                                             bool sliding = false,
-		                                             IEnumerable<string> dependencyKeys = null,
 		                                             CachePriority? priority = null)
 		{
-			return new CachingParameters (TimeSpan.FromSeconds (seconds), sliding, dependencyKeys, priority);
+			return new CachingParameters (TimeSpan.FromSeconds (seconds), sliding, priority);
 		}
 
 
@@ -120,10 +82,9 @@ namespace Rocks.Caching
 		/// </summary>
 		public static CachingParameters FromMinutes (double minutes,
 		                                             bool sliding = false,
-		                                             IEnumerable<string> dependencyKeys = null,
 		                                             CachePriority? priority = null)
 		{
-			return new CachingParameters (TimeSpan.FromMinutes (minutes), sliding, dependencyKeys, priority);
+			return new CachingParameters (TimeSpan.FromMinutes (minutes), sliding, priority);
 		}
 
 
@@ -132,10 +93,9 @@ namespace Rocks.Caching
 		/// </summary>
 		public static CachingParameters FromHours (double hours,
 		                                           bool sliding = false,
-		                                           IEnumerable<string> dependencyKeys = null,
 		                                           CachePriority? priority = null)
 		{
-			return new CachingParameters (TimeSpan.FromHours (hours), sliding, dependencyKeys, priority);
+			return new CachingParameters (TimeSpan.FromHours (hours), sliding, priority);
 		}
 
 
@@ -144,17 +104,12 @@ namespace Rocks.Caching
 		/// </summary>
 		public static CachingParameters FromDays (double days,
 		                                          bool sliding = false,
-		                                          IEnumerable<string> dependencyKeys = null,
 		                                          CachePriority? priority = null)
 		{
-			return new CachingParameters (TimeSpan.FromDays (days), sliding, dependencyKeys, priority);
+			return new CachingParameters (TimeSpan.FromDays (days), sliding, priority);
 		}
 
-		#endregion
-
-		#region Public methods
-
-		/// <summary>
+	    /// <summary>
 		///     Performs deep clone of the current object instance.
 		/// </summary>
 		public CachingParameters Clone ()
@@ -172,15 +127,15 @@ namespace Rocks.Caching
 		public override string ToString ()
 		{
 			if (this.NoCaching)
-				return "no caching";
+			{
+			    return "no caching";
+			}
 
-			var result = (this.sliding ? "sliding expiration " : "absolute expiration ") +
-			             this.expiration +
-			             ", priority " + this.priority;
+		    var result = (this.Sliding ? "sliding expiration " : "absolute expiration ") +
+			             this.Expiration +
+			             ", priority " + this.Priority;
 
 			return result;
 		}
-
-		#endregion
 	}
 }

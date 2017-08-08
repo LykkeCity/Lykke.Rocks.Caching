@@ -1,16 +1,11 @@
-﻿using System;
-using System.Linq;
-
-namespace Rocks.Caching
+﻿namespace Rocks.Caching
 {
 	/// <summary>
 	///     An pass-through <see cref="ICacheProvider" /> implementation that does not holds any cache items and always empty.
 	/// </summary>
 	public class NullCacheProvider : ICacheProvider
 	{
-		#region ICacheProvider Members
-
-		/// <summary>
+	    /// <summary>
 		///     Gets cached object by <paramref name="key" />.
 		///     Returns null if object was not found in cache.
 		/// </summary>
@@ -47,7 +42,5 @@ namespace Rocks.Caching
 		public void Remove (string key)
 		{
 		}
-
-		#endregion
 	}
 }

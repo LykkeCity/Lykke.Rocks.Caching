@@ -29,9 +29,11 @@ namespace Rocks.Caching
 			object value;
 
 			if (!this.Items.TryGetValue (key, out value))
-				return null;
+			{
+			    return null;
+			}
 
-			return value;
+		    return value;
 		}
 
 

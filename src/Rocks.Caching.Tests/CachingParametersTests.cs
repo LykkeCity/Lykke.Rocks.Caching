@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ploeh.AutoFixture;
 
 namespace Rocks.Caching.Tests
 {
@@ -9,12 +8,10 @@ namespace Rocks.Caching.Tests
 	public class CachingParametersTests
 	{
 		[TestMethod]
-		public void Clone_ReturnsDeepClone ()
+		public void Clone_ReturnsDeepClone()
 		{
 			// arrange
-			var fixture = new Fixture ();
-
-			var source = fixture.Create<CachingParameters> ();
+			var source = new CachingParameters(TimeSpan.FromDays(123), true, CachePriority.High);
 
 
 			// act

@@ -4,25 +4,25 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FastMember;
+using JetBrains.Annotations;
 
 namespace Rocks.Caching
 {
 	public static class CacheKeyBuilder
 	{
-		#region Static methods
-
-		/// <summary>
+	    /// <summary>
 		///     Creates a cache key in "{args1}{args2}{args3} ... ect." format.
 		/// </summary>
 		/// <param name="args1">An argument (IEnumerable objects will be represented as concatinated string of it's items).</param>
 		[DebuggerStepThrough, MethodImpl (MethodImplOptions.AggressiveInlining)]
-		public static string Create (object args1)
+		public static string Create ([CanBeNull] object args1)
 		{
 			if (args1 == null)
-				return string.Empty;
+			{
+			    return string.Empty;
+			}
 
-			var sb = new StringBuilder ();
+		    var sb = new StringBuilder ();
 
 			sb.Append ('{');
 			Append (sb, args1);
@@ -353,7 +353,7 @@ namespace Rocks.Caching
 		                             object args9,
 		                             object args10,
 		                             object args11,
-		                             params object[] args)
+		                             [CanBeNull] params object[] args)
 		{
 			var sb = new StringBuilder ();
 
@@ -404,43 +404,15 @@ namespace Rocks.Caching
 			return sb.ToString ();
 		}
 
-
-		/// <summary>
-		///     Creates a cache key in "{property1}{property2}{property3} ... ect." format.
-		/// </summary>
-		[DebuggerStepThrough, MethodImpl (MethodImplOptions.AggressiveInlining)]
-		public static string CreateFromObjectProperties (object obj, string prefix = null)
-		{
-			if (obj == null)
-				return string.Empty;
-
-			var accessor = TypeAccessor.Create (obj.GetType ());
-			var sb = new StringBuilder ();
-
-			if (!string.IsNullOrEmpty (prefix))
-				sb.Append (prefix);
-
-			foreach (var m in accessor.GetMembers ())
-			{
-				sb.Append ('{');
-				Append (sb, accessor[obj, m.Name]);
-				sb.Append ('}');
-			}
-
-			return sb.ToString ();
-		}
-
-		#endregion
-
-		#region Private methods
-
-		[DebuggerStepThrough]
-		private static void Append (StringBuilder sb, object v)
+	    [DebuggerStepThrough]
+		private static void Append (StringBuilder sb, [CanBeNull] object v)
 		{
 			if (v == null)
-				return;
+			{
+			    return;
+			}
 
-			var v_custom = v as ICacheKeyProvider;
+		    var v_custom = v as ICacheKeyProvider;
 			if (v_custom != null)
 			{
 				sb.Append (v.GetType ().Name);
@@ -478,7 +450,5 @@ namespace Rocks.Caching
 
 			sb.Append (':');
 		}
-
-		#endregion
 	}
 }
