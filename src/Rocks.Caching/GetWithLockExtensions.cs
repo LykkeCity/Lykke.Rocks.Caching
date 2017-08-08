@@ -11,14 +11,8 @@ namespace Rocks.Caching
     /// </summary>
     public static class GetWithLockExtensions
     {
-        #region Private fields
-
         private static readonly object EmptyResult = new object ();
         internal static readonly ConcurrentDictionary<string, CachedResultLock> Locks = new ConcurrentDictionary<string, CachedResultLock> ();
-
-        #endregion
-
-        #region Static methods
 
         /// <summary>
         ///     Gets cached object.
@@ -199,10 +193,6 @@ namespace Rocks.Caching
             return default (T);
         }
 
-        #endregion
-
-        #region Private methods
-
         private static CachedResultLock AcquireCachedResultLock (string key)
         {
             var result = Locks.GetOrAdd (key, x => new CachedResultLock ());
@@ -251,7 +241,5 @@ namespace Rocks.Caching
             cachedResultLock.Result = result;
             cachedResultLock.IsExecuted = true;
         }
-
-        #endregion
     }
 }

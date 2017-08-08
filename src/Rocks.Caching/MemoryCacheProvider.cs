@@ -45,27 +45,42 @@ namespace Rocks.Caching
 			    return;
 			}
 
-		    var cache_item_policy = new MemoryCacheEntryOptions();
-
-			if (parameters.Priority == CachePriority.NotRemovable)
-			{
-			    cache_item_policy.Priority = CacheItemPriority.NeverRemove;
-			}
+		    var cacheEntryOptions = new MemoryCacheEntryOptions
+		                            {
+		                                Priority = GetCacheItemPriority(parameters.Priority)
+		                            };
 
 		    if (!parameters.Sliding)
 		    {
-		        cache_item_policy.AbsoluteExpiration = DateTimeOffset.Now + parameters.Expiration;
+		        cacheEntryOptions.AbsoluteExpiration = DateTimeOffset.Now + parameters.Expiration;
 		    }
 		    else
 		    {
-		        cache_item_policy.SlidingExpiration = parameters.Expiration;
+		        cacheEntryOptions.SlidingExpiration = parameters.Expiration;
 		    }
 
-			cache.Set (key, value, cache_item_policy);
+			cache.Set (key, value, cacheEntryOptions);
 		}
 
+	    private static CacheItemPriority GetCacheItemPriority(CachePriority? priority)
+	    {
+	        switch (priority)
+	        {
+	            case CachePriority.Low:
+	                return CacheItemPriority.Low;
+	            case null:
+	            case CachePriority.Normal:
+	                return CacheItemPriority.Normal;
+	            case CachePriority.High:
+	                return CacheItemPriority.High;
+	            case CachePriority.NotRemovable:
+	                return CacheItemPriority.NeverRemove;
+	            default:
+	                throw new ArgumentOutOfRangeException(nameof(priority), priority, null);
+	        }
+	    }
 
-		/// <summary>
+	    /// <summary>
 		///     Removes (almost?) all cached objects.
 		/// </summary>
 		public void Clear ()

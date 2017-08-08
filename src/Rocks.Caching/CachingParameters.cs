@@ -10,12 +10,13 @@ namespace Rocks.Caching
 	[DebuggerDisplay ("{Expiration}, Sliding = {Sliding}, Priority = {Priority}")]
 	public sealed class CachingParameters
 	{
-	    public static readonly CachingParameters NoCache = new CachingParameters (TimeSpan.Zero);
+	    public static CachingParameters NoCache => new CachingParameters (TimeSpan.Zero);
+	    public static CachingParameters InfiniteCache => new CachingParameters((TimeSpan?)null);
 
-	    /// <summary>
-		///     Initializes a new instance of the <see cref="T:System.Object" /> class.
-		/// </summary>
-		public CachingParameters (TimeSpan expiration, bool sliding = false, CachePriority? priority = null)
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="T:System.Object" /> class.
+        /// </summary>
+        public CachingParameters (TimeSpan? expiration, bool sliding = false, CachePriority? priority = null)
 		{
 			this.Expiration = expiration;
 			this.Sliding = sliding;
@@ -38,7 +39,7 @@ namespace Rocks.Caching
 	    /// <summary>
 		///     (GET) Expiration time.
 		/// </summary>
-		public TimeSpan Expiration { get; }
+		public TimeSpan? Expiration { get; }
 
 	    /// <summary>
 		///     (GET) True if current parameters represents sliding expiration.
@@ -51,9 +52,14 @@ namespace Rocks.Caching
 		public CachePriority? Priority { get; }
 
 	    /// <summary>
-		///     (GET) Returns true if no expiration set for current parameters.
+		///     (GET) Returns true if no caching is set for current parameters.
 		/// </summary>
 		public bool NoCaching => this.Expiration == TimeSpan.Zero;
+
+	    /// <summary>
+		///     (GET) Returns true if infinite caching is set for current parameters.
+		/// </summary>
+		public bool InfiniteCaching => this.Expiration == null;
 
 	    /// <summary>
 		///     Creates <see cref="CachingParameters" /> instance with expiration of <paramref name="milliseconds" />.
@@ -129,6 +135,11 @@ namespace Rocks.Caching
 			if (this.NoCaching)
 			{
 			    return "no caching";
+			}
+
+			if (this.NoCaching)
+			{
+			    return "infinite caching";
 			}
 
 		    var result = (this.Sliding ? "sliding expiration " : "absolute expiration ") +

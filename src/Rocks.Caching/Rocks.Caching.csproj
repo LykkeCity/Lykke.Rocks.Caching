@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
     <PackageId>Rocks.Caching.NetStandard16</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
     <Authors>Michael Logutov, Mihail Yartsev</Authors>
     <Description>Caching abstraction library. A fork of Michael Logutov's Rocks.Caching library ported for .net standard 1.6 with some advanced functions cut off: dependent cached objects and WebCache support.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -13,10 +12,15 @@
     <Company>Michael Logutov, Mihail Yartsev</Company>
     <PackageLicenseUrl>https://github.com/mihail-yartsev/Rocks.Caching/blob/master/LICENSE</PackageLicenseUrl>
     <Product>Rocks.Caching.NetStandard16</Product>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.6\Rocks.Caching.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.6\Rocks.Caching.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

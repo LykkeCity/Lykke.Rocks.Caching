@@ -15,8 +15,6 @@ namespace Rocks.Caching.Tests.GetWithLock
     [TestClass]
     public class GetTests
     {
-        #region Public methods
-
         [TestInitialize]
         public void TestInitialize ()
         {
@@ -271,10 +269,6 @@ namespace Rocks.Caching.Tests.GetWithLock
             GetWithLockExtensions.Locks.Should ().BeEmpty ();
         }
 
-        #endregion
-
-        #region Private methods
-
         private static void MultiThreadWithConcurency_InvokesGetValueFunctionOnce_Test (int maxThreads, bool sta)
         {
             // arrange
@@ -441,7 +435,5 @@ namespace Rocks.Caching.Tests.GetWithLock
 
             GetWithLockExtensions.Locks.Should ().BeEmpty ();
         }
-
-        #endregion
     }
 }
