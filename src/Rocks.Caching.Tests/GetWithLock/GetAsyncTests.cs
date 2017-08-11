@@ -138,40 +138,6 @@ namespace Rocks.Caching.Tests.GetWithLock
 
 
         [TestMethod, Timeout (1000)]
-        public async Task ResultDataIsNullAndDependencyKeysIncludeResult_DoesNotCache ()
-        {
-            // arrange
-            var cache = new CacheProviderStub ();
-            var cache_key = Guid.NewGuid ().ToString ();
-            var exec_count = 0;
-
-            var create_result = new Func<Task<CachableResult<string>>>
-                (() => Task.Run (() =>
-                                 {
-                                     exec_count++;
-
-                                     return new CachableResult<string>
-                                         (null,
-                                          new CachingParameters (TimeSpan.FromMinutes (1)));
-                                 }));
-
-
-            // act
-            var result = await cache.GetAsync (cache_key, create_result);
-            var result2 = await cache.GetAsync (cache_key, create_result);
-
-
-            // assert
-            cache.Values.Should ().NotContainKey ("Test");
-            result.Should ().BeNull ();
-            result2.Should ().BeNull ();
-            exec_count.Should ().Be (2);
-
-            GetWithLockExtensions.Locks.Should ().BeEmpty ();
-        }
-
-
-        [TestMethod, Timeout (1000)]
         public async Task ResultIsNull_DoesNotCache ()
         {
             // arrange

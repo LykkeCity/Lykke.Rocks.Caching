@@ -4,7 +4,7 @@ Rocks.Caching
 Rocks.Caching is a library that aimed to provide clean minimal abstraction over caching mechanics for it to be unit test and refactor friendly.
 
 ## ICacheProvider root interface
-The root interface is [ICacheProvider](https://github.com/mihail-yartsev/Rocks.Caching/blob/master/src/Rocks.Caching/ICacheProvider.cs) which provides minimal method set for caching capabilities:
+The root interface is [ICacheProvider](https://github.com/LykkeCity/Lykke.Rocks.Caching/blob/master/src/Rocks.Caching/ICacheProvider.cs) which provides minimal method set for caching capabilities:
 
 * Get item
 * Add item
@@ -25,7 +25,7 @@ public class Global : HttpApplication
 	protected void Application_Start (object sender, EventArgs e)
 	{
 		// ...
-  		container.RegisterSingle<ICacheProvider> (new WebCacheProvider ());
+  		container.RegisterSingle<ICacheProvider> (new MemoryCacheProvider ());
 		// ...
 	}
 }
@@ -97,4 +97,4 @@ public async Task<int> GetUsersCountAsync ()
 ```
 
 ## NuGet package
-You can install nuget package for Rocks.Caching here: https://www.nuget.org/packages/Rocks.Caching.NetStandard16
+You can install nuget package for Rocks.Caching here: https://www.nuget.org/packages/Lykke.Rocks.Caching

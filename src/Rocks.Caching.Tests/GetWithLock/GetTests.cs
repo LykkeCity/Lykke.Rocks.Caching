@@ -136,40 +136,6 @@ namespace Rocks.Caching.Tests.GetWithLock
 
 
         [TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.Timeout (1000)]
-        public void ResultDataIsNullAndDependencyKeysIncludeResult_DoesNotCache ()
-        {
-            // arrange
-            var cache = new CacheProviderStub ();
-            var cache_key = Guid.NewGuid ().ToString ();
-            var exec_count = 0;
-
-            var create_result = new Func<CachableResult<string>>
-                (() =>
-                 {
-                     exec_count++;
-
-                     return new CachableResult<string>
-                         (null,
-                          new CachingParameters (TimeSpan.FromMinutes (1)));
-                 });
-
-
-            // act
-            var result = cache.Get (cache_key, create_result);
-            var result2 = cache.Get (cache_key, create_result);
-
-
-            // assert
-            cache.Values.Should ().NotContainKey ("Test");
-            result.Should ().BeNull ();
-            result2.Should ().BeNull ();
-            exec_count.Should ().Be (2);
-
-            GetWithLockExtensions.Locks.Should ().BeEmpty ();
-        }
-
-
-        [TestMethod, Microsoft.VisualStudio.TestTools.UnitTesting.Timeout (1000)]
         public void ResultIsNull_DoesNotCache ()
         {
             // arrange

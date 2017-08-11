@@ -5,207 +5,207 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Rocks.Caching.Tests
 {
-	public abstract class CacheProviderTestBase
-	{
-		protected abstract ICacheProvider CreateSut ();
-
-
-		[TestMethod]
-		public void Add_Item_WasNotPresentBefore_AddsIt ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var item = "item";
-			var parameters = new CachingParameters (TimeSpan.FromDays (1));
-
-
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			var result = cache.Get (key);
-
-
-			// assert
-			result.Should ().Be (item);
-		}
+    public abstract class CacheProviderTestBase
+    {
+        protected abstract ICacheProvider CreateSut ();
 
 
         [TestMethod]
-		public void Add_Item_WasNotPresentBefore_NoCache_DoesNotAddsIt ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
+        public void Add_Item_WasNotPresentBefore_AddsIt ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
 
-			var key = "key";
-			var item = "item";
+            var key = "key";
+            var item = "item";
+            var parameters = new CachingParameters (TimeSpan.FromDays (1));
+
+
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            var result = cache.Get (key);
+
+
+            // assert
+            result.Should ().Be (item);
+        }
+
+
+        [TestMethod]
+        public void Add_Item_WasNotPresentBefore_NoCache_DoesNotAddsIt ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var item = "item";
             var parameters = CachingParameters.NoCache;
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			var result = cache.Get (key);
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            var result = cache.Get (key);
 
 
-			// assert
+            // assert
             result.Should ().BeNull ();
-		}
+        }
 
 
-		[TestMethod]
-		public void Add_Null_WasNotPresentBefore_DoesNotAddsIt ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
+        [TestMethod]
+        public void Add_Null_WasNotPresentBefore_DoesNotAddsIt ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
 
-			var key = "key";
-			var parameters = new CachingParameters (TimeSpan.FromDays (1));
-
-
-			// act
-			cache.Clear ();
-			cache.Add (key, null, parameters);
-			var result = cache.Get (key);
+            var key = "key";
+            var parameters = new CachingParameters (TimeSpan.FromDays (1));
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Add (key, null, parameters);
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Add_Null_WasPresentBefore_RemovesIt ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var parameters = new CachingParameters (TimeSpan.FromDays (1));
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, new object (), parameters);
-			cache.Add (key, null, parameters);
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Add_Null_WasPresentBefore_RemovesIt ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var parameters = new CachingParameters (TimeSpan.FromDays (1));
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Add (key, new object (), parameters);
+            cache.Add (key, null, parameters);
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Remove_Exists_RemovesIt ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var item = "item";
-			var parameters = new CachingParameters (TimeSpan.FromDays (1));
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			cache.Remove (key);
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Remove_Exists_RemovesIt ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var item = "item";
+            var parameters = new CachingParameters (TimeSpan.FromDays (1));
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            cache.Remove (key);
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Remove_NotExists_DoesNothing ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Remove (key);
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Remove_NotExists_DoesNothing ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Remove (key);
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Clear_HasItem_RemovesAll ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var item = "item";
-			var parameters = new CachingParameters (TimeSpan.FromDays (1));
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			cache.Clear ();
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Clear_HasItem_RemovesAll ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var item = "item";
+            var parameters = new CachingParameters (TimeSpan.FromDays (1));
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            cache.Clear ();
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Add_AbsoluteExpiration_ReturnsNullAfterTimePassed ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var item = "item";
-			var parameters = new CachingParameters (TimeSpan.FromMilliseconds (100));
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			Thread.Sleep (TimeSpan.FromMilliseconds (200));
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Add_AbsoluteExpiration_ReturnsNullAfterTimePassed ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var item = "item";
+            var parameters = new CachingParameters (TimeSpan.FromMilliseconds (100));
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            Thread.Sleep (TimeSpan.FromMilliseconds (200));
+            var result = cache.Get (key);
 
 
-		[TestMethod]
-		public void Add_SlidingExpiration_ReturnsNullAfterTimePassed ()
-		{
-			// arrange
-			var cache = this.CreateSut ();
-
-			var key = "key";
-			var item = "item";
-			var parameters = new CachingParameters (TimeSpan.FromMilliseconds (100), sliding: true);
+            // assert
+            result.Should ().BeNull ();
+        }
 
 
-			// act
-			cache.Clear ();
-			cache.Add (key, item, parameters);
-			Thread.Sleep (TimeSpan.FromMilliseconds (200));
-			var result = cache.Get (key);
+        [TestMethod]
+        public void Add_SlidingExpiration_ReturnsNullAfterTimePassed ()
+        {
+            // arrange
+            var cache = this.CreateSut ();
+
+            var key = "key";
+            var item = "item";
+            var parameters = new CachingParameters (TimeSpan.FromMilliseconds (100), sliding: true);
 
 
-			// assert
-			result.Should ().BeNull ();
-		}
-	}
+            // act
+            cache.Clear ();
+            cache.Add (key, item, parameters);
+            Thread.Sleep (TimeSpan.FromMilliseconds (200));
+            var result = cache.Get (key);
+
+
+            // assert
+            result.Should ().BeNull ();
+        }
+    }
 }
